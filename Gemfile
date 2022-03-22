@@ -13,7 +13,7 @@ gem 'puma', '~> 5.0'
 gem 'sass-rails', '>= 6'
 gem 'bootstrap', '~> 4.1.1'
 gem 'jquery-rails'
-gem 'font-awesome-sass'
+gem 'font-awesome-sass', '~> 5.4.1'
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
 gem 'webpacker', '~> 5.0'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
