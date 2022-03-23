@@ -34,5 +34,13 @@ module GuitarChordsQuiz
 
     # Don't generate system test files.
     config.generators.system_tests = nil
+    config.generators do |g|
+      g.skip_routes true #ルーティングを生成しない
+      g.assets false #assetsを生成しない
+      g.helper false #helperを生成しない
+      g.test_framework false #testファイルを生成しない
+    end
+    config.i18n.default_locale = :ja
+    config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.{rb,yml}').to_s]
   end
 end
