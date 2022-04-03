@@ -12,23 +12,38 @@
             </div>
           </template>
           <template v-else>
-            <div class="modal-header">
-            <h5 class="modal-title" :id="'question-label-' + questionIndex+1">第 {{ (questionIndex+1) }} 問　{{ currentQuestion.question }}</h5>
-            </div>
-            <div class="modal-body">
-              <button
-                type="button"
-                class="btn btn-primary btn-lg btn-block text-left"
-                v-for="(option, key) in currentQuestion.options"
-                :key="key"
-                @click="addAnswer(key)"
-              >
-                {{ (key+1) }}. {{ option }}
-              </button>
-            </div>
-            <div class="modal-footer">
-              <button @click="handleOpenQuizConfirmationModel" class="btn btn-secondary" data-dismiss="modal">CLOSE</button>
-            </div>
+            <template v-if="!answered">
+              <div class="modal-header">
+                <h5 class="modal-title" :id="'question-label-' + questionIndex+1">第 {{ (questionIndex+1) }} 問　{{ currentQuestion.question }}</h5>
+              </div>
+              <div class="modal-body">
+                <button
+                  type="button"
+                  class="btn btn-primary btn-lg btn-block text-left"
+                  v-for="(option, key) in currentQuestion.options"
+                  :key="key"
+                  @click="judgeAnswer(key)"
+                >
+                  {{ (key+1) }}. {{ option }}
+                </button>
+              </div>
+              <div class="modal-footer">
+                <button @click="handleOpenQuizConfirmationModel" class="btn btn-secondary" data-dismiss="modal">CLOSE</button>
+              </div>
+            </template>
+            <template v-if="answered">
+              <div class="modal-header">
+                <h5 class="modal-title" :id="'question-answer-' + questionIndex+1">{{ result }}</h5>
+              </div>
+              <div class="modal-body">
+                <p>正しい回答：{{ current_answer }}. {{ current_answer_text }}</p>
+                <p>あなたの回答：{{ user_answer }}. {{ user_answer_text }}</p>
+              </div>
+              <div class="modal-footer">
+                <button @click="nextQuiz"  class="btn btn-success" data-bs-toggle="modal" data-dismiss="modal">NEXT</button>
+                <button @click="handleOpenQuizConfirmationModel" class="btn btn-secondary" data-dismiss="modal">CLOSE</button>
+              </div>
+            </template>
             <transition name="fade">
               <QuizConfirmationModel
                 v-if="isVisibleCloseQuizConfirmationModel"
@@ -52,8 +67,14 @@ export default {
   components: { QuizConfirmationModel },
   data() {
     return {
-      answers: [],
       questionIndex: 0,
+      answers: [],
+      result: "",
+      answered: false,
+      current_answer: 0,
+      current_answer_text: "",
+      user_answer: 0,
+      user_answer_text: "",
       questions: [
         {
           question: '「A」の音は？',
@@ -105,9 +126,10 @@ export default {
     handleCloseCloseQuizModel() {
       this.$emit('close-quiz')
     },
-    // 正答数カウンター
-    addAnswer(key) {
-      this.answers.push(key);
+    nextQuiz(){
+      this.result = '';
+      this.answered = false
+      // 正答数カウンター
       if(this.questions.length == this.answers.length) {
         var correctCount = 0;
         for(var i in this.answers) {
@@ -122,6 +144,20 @@ export default {
         this.questionIndex++;
       }
     },
+    judgeAnswer(key) {
+      // 正誤チェッカー
+      this.answers.push(key);
+      this.answered = true;
+      this.current_answer = this.questions[this.questionIndex].answer + 1
+      this.current_answer_text = this.questions[this.questionIndex].options[this.current_answer - 1]
+      this.user_answer = key + 1
+      this.user_answer_text = this.questions[this.questionIndex].options[key]
+      if(key == this.questions[this.questionIndex].answer) {
+        this.result = '正解'
+      } else {
+        this.result = '不正解'
+      }
+    }
   }
 }
 </script>
