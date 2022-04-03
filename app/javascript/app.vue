@@ -1,6 +1,9 @@
 <template>
   <div id="app" class="jumbotron" >
     <TheHeader class="mb-auto" />
+    <div class="wrapper">
+      <router-view/>
+    </div>
     <TheFooter class="fixed-bottom" />
   </div>
 </template>
@@ -25,5 +28,11 @@ export default {
   border-radius: 0;
   padding: 0px;
   margin-bottom: 0px;
+}
+
+.wrapper {
+  flex: 1 1 auto;
+  max-width: 100%;
+  position: relative;
 }
 </style>
