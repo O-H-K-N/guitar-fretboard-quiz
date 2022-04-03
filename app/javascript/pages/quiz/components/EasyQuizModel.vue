@@ -7,8 +7,8 @@
             v-if="!startFlag"
           >
             <div class="modal-body text-center">
-              <button @click="startFlag = true"  class="btn btn-success" data-bs-toggle="modal" data-dismiss="modal">START</button>
-              <button @click="handleCloseCloseQuizModel" class="btn btn-secondary" data-dismiss="modal">CLOSE</button>
+              <button @click="startFlag = true"  class="btn btn-success" data-bs-toggle="modal" data-dismiss="modal">始める</button>
+              <button @click="handleCloseCloseQuizModel" class="btn btn-secondary" data-dismiss="modal">閉じる</button>
             </div>
           </template>
           <template v-else>
@@ -28,7 +28,7 @@
                 </button>
               </div>
               <div class="modal-footer">
-                <button @click="handleOpenQuizConfirmationModel" class="btn btn-secondary" data-dismiss="modal">CLOSE</button>
+                <button @click="handleOpenQuizConfirmationModel" class="btn btn-secondary" data-dismiss="modal">閉じる</button>
               </div>
             </template>
             <template v-if="answered">
@@ -40,8 +40,8 @@
                 <p>あなたの回答：{{ user_answer }}. {{ user_answer_text }}</p>
               </div>
               <div class="modal-footer">
-                <button @click="nextQuiz"  class="btn btn-success" data-bs-toggle="modal" data-dismiss="modal">NEXT</button>
-                <button @click="handleOpenQuizConfirmationModel" class="btn btn-secondary" data-dismiss="modal">CLOSE</button>
+                <button @click="nextQuiz"  class="btn btn-success" data-bs-toggle="modal" data-dismiss="modal">次へ</button>
+                <button @click="handleOpenQuizConfirmationModel" class="btn btn-secondary" data-dismiss="modal">閉じる</button>
               </div>
             </template>
             <transition name="fade">

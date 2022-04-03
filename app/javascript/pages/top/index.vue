@@ -30,10 +30,10 @@ export default {
   components: { EasyQuizModel },
   data() {
     return {
-      app_name: "Quiz Guitar Chord",
-      level1: "E A S Y",
-      level2: "M I D D L E",
-      level3: "H I G H",
+      app_name: "ギター指板クイズ",
+      level1: "かんたん",
+      level2: "ふつう",
+      level3: "むずかしい",
 
       isVisibleEasyQuizModel: false,
     }
@@ -52,6 +52,7 @@ export default {
 <style scoped>
 .container {
   padding: 15px;
+  font-family: "ヒラギノ丸ゴ ProN","Hiragino Maru Gothic ProN";
 }
 
 .quiz-select-field {
