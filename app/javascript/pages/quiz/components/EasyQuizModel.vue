@@ -7,7 +7,7 @@
             v-if="!startFlag"
           >
             <div class="modal-body text-center">
-              <button @click="startFlag = true"  class="btn btn-success" data-bs-toggle="modal" data-dismiss="modal">始める</button>
+              <button @click="quizShuffle(quizzes);" class="btn btn-success" data-bs-toggle="modal" data-dismiss="modal">始める</button>
               <button @click="handleCloseQuizModel" class="btn btn-secondary" data-dismiss="modal">閉じる</button>
             </div>
           </template>
@@ -105,6 +105,19 @@ export default {
       this.$axios.get("quizzes")
         .then(res => this.quizzes = res.data)
         .catch(err => console.log(err.status));
+    },
+    // this.quizzesの中身をシャッフルするメソッド
+    quizShuffle(array) {
+      this.startFlag = true
+      for(var i = (array.length - 1); 0 < i; i--){
+        // 0〜(i+1)の範囲で値を取得
+        var r = Math.floor(Math.random() * (i + 1));
+        // 要素の並び替えを実行
+        var tmp = array[i];
+        array[i] = array[r];
+        array[r] = tmp;
+      }
+      return array;
     },
     handleOpenQuizConfirmationModel() {
       this.isVisibleQuizConfirmationModel = true;
