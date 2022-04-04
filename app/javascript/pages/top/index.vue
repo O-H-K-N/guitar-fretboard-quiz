@@ -6,44 +6,97 @@
         <button
           @click="handleOpenEasyQuizModel()"
           class="btn btn-outline-light font-weight-bold filter-none px-3 m-3"
-          type="button">
-            {{ level1}}
-          </button><br>
-        <button class="btn btn-outline-light font-weight-bold px-3 m-3" type="button" disabled>{{ level2 }}</button><br>
-        <button class="btn btn-outline-light font-weight-bold px-3 m-3" type="button" disabled>{{ level3 }}</button>
+          type="button"
+        >
+          {{ level1}}
+        </button><br>
+        <button
+          @click="handleOpenNormalQuizModel()"
+          class="btn btn-outline-light font-weight-bold px-3 m-3"
+          type="button"
+          disabled
+        >
+          {{ level2 }}
+        </button><br>
+        <button
+          @click="handleOpenHardQuizModel()"
+          class="btn btn-outline-light font-weight-bold px-3 m-3"
+          type="button"
+          disabled
+        >
+          {{ level3 }}
+        </button>
       </div>
     </div>
     <transition name="fade">
-      <EasyQuizModel
-        v-if="isVisibleEasyQuizModel"
-        @close-quiz="handleCloseEasyQuizModel"
+      <QuizModel
+        v-if="isVisibleQuizModel"
+        :setQuizzes="setQuizzes"
+        @close-quiz="handleCloseQuizModel"
       />
     </transition>
   </div>
 </template>
 
 <script>
-import EasyQuizModel from '../quiz/components/EasyQuizModel.vue'
+import QuizModel from '../quiz/components/QuizModel.vue'
 
 export default {
   name: "TopIndex",
-  components: { EasyQuizModel },
+  components: { QuizModel },
   data() {
     return {
       app_name: "ギター指板クイズ",
       level1: "かんたん",
       level2: "ふつう",
       level3: "むずかしい",
+      quizzes: [],
+      setQuizzes:[],
 
-      isVisibleEasyQuizModel: false,
+      isVisibleQuizModel: false,
     }
   },
+  created() {
+    this.fetchQuizzes();
+  },
   methods: {
-    handleOpenEasyQuizModel() {
-      this.isVisibleEasyQuizModel = true;
+    fetchQuizzes() {
+      this.$axios.get("quizzes")
+        .then(res => this.quizzes = res.data)
+        .catch(err => console.log(err.status));
     },
-    handleCloseEasyQuizModel() {
-      this.isVisibleEasyQuizModel = false;
+    // カテゴリー「かんたん」
+    handleOpenEasyQuizModel() {
+      this.setQuizzes = [],
+      this.quizzes.forEach(e => {
+        if(e.category == "easy"){
+          this.setQuizzes.push(e)
+        }
+      }),
+      this.isVisibleQuizModel = true;
+    },
+    // カテゴリー「ふつう」
+    handleOpenNormalQuizModel() {
+      this.setQuizzes = [],
+      this.quizzes.forEach(e => {
+        if(e.category == "normal"){
+          this.setQuizzes.push(e)
+        }
+      }),
+      this.isVisibleQuizModel = true;
+    },
+    // カテゴリー「むずかしい」
+    handleOpenHardQuizModel() {
+      this.setQuizzes = [],
+      this.quizzes.forEach(e => {
+        if(e.category == "hard"){
+          this.setQuizzes.push(e)
+        }
+      }),
+      this.isVisibleQuizModel = true;
+    },
+    handleCloseQuizModel() {
+      this.isVisibleQuizModel = false;
     },
   }
 }

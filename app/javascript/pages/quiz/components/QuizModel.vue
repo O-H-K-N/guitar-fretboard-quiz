@@ -1,5 +1,5 @@
 <template>
-  <div id="easy-quiz-model">
+  <div id="quiz-model">
     <div class="modal">
       <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -7,7 +7,7 @@
             v-if="!startFlag"
           >
             <div class="modal-body text-center">
-              <button @click="quizShuffle(quizzes);" class="btn btn-success" data-bs-toggle="modal" data-dismiss="modal">始める</button>
+              <button @click="quizShuffle(setQuizzes);" class="btn btn-success" data-bs-toggle="modal" data-dismiss="modal">始める</button>
               <button @click="handleCloseQuizModel" class="btn btn-secondary" data-dismiss="modal">閉じる</button>
             </div>
           </template>
@@ -71,8 +71,14 @@ import QuizConfirmationModel from './QuizConfirmationModel.vue'
 import QuizResultModel from './QuizResultModel.vue'
 
 export default {
-  name: "EasyQuizModel",
+  name: "QuizModel",
   components: { QuizConfirmationModel, QuizResultModel },
+  props: {
+    setQuizzes: {
+      type: Array,
+      require: true
+    }
+  },
   data() {
     return {
       quizIndex: 0,
@@ -83,29 +89,19 @@ export default {
       current_answer: "",
       user_answer: "",
       next: '次へ',
-      quizzes: [],
       startFlag: false,
       fontColor: "",
       isVisibleQuizConfirmationModel: false,
       isVisibleQuizResultModel: false,
     }
   },
-  created() {
-    // 呼び出したAPIからQuiz情報を取得
-    this.fetchQuizzes();
-  },
   computed: {
     // 解答中のクイズ
     currentQuiz() {
-      return this.quizzes[this.quizIndex];
+      return this.setQuizzes[this.quizIndex];
     }
   },
   methods: {
-    fetchQuizzes() {
-      this.$axios.get("quizzes")
-        .then(res => this.quizzes = res.data)
-        .catch(err => console.log(err.status));
-    },
     // this.quizzesの中身をシャッフルするメソッド
     quizShuffle(array) {
       this.startFlag = true

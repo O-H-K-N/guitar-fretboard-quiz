@@ -17,3 +17,7 @@ Quiz.create(title: '「G」の音は？', content: "音名「G」の階名「ソ
 Quiz.create(title: '「F」の音は？', content: "音名「F」の階名「ファ」です。", options: ["１弦開放", "３弦１フレット", "５弦開放", "６弦１フレット"], answer: 3, category: 1)
 Quiz.create(title: '「F」の音は？', content: "音名「F」の階名「ファ」です。", options: ["４弦３フレット", "３弦３フレット", "２弦３フレット", "１弦３フレット"], answer: 0, category: 1)
 Quiz.create(title: '「F」の音は？', content: "音名「F」の階名「ファ」です。", options: ["５弦１フレット", "４弦１フレット", "１弦１フレット", "２弦１フレット"], answer: 2, category: 1)
+# ふつう
+Quiz.create(title: '「F#」の音は？', content: "音名「F#」の階名「ファ#」です。", options: ["６弦２フレット", "４弦３フレット", "３弦２フレット", "１弦１フレット"], answer: 0, category: 2)
+# むずかしい
+Quiz.create(title: '「F」の音は？', content: "音名「F」の階名「ファ」です。", options: ["５弦７フレット", "４弦９フレット", "３弦１０フレット", "２弦１２フレット"], answer: 0, category: 3)
