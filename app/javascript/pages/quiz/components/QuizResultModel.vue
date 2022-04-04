@@ -7,7 +7,7 @@
             <h5 class="modal-title">結果発表</h5>
           </div>
           <div class="modal-body text-center">
-            <p>{{ numberOfQuizzes }}問中{{ score }}問正解です！</p>
+            <h4>{{ numberOfQuizzes }}問中{{ score }}問正解です！</h4>
           </div>
           <div class="modal-footer">
             <button @click="handleCloseQuizModel" class="btn btn-secondary" data-dismiss="modal">終了</button>

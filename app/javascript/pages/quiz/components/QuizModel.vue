@@ -1,5 +1,5 @@
 <template>
-  <div id="easy-quiz-model">
+  <div id="quiz-model">
     <div class="modal">
       <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -7,14 +7,14 @@
             v-if="!startFlag"
           >
             <div class="modal-body text-center">
-              <button @click="startFlag = true"  class="btn btn-success" data-bs-toggle="modal" data-dismiss="modal">始める</button>
+              <button @click="quizShuffle(setQuizzes);" class="btn btn-success" data-bs-toggle="modal" data-dismiss="modal">始める</button>
               <button @click="handleCloseQuizModel" class="btn btn-secondary" data-dismiss="modal">閉じる</button>
             </div>
           </template>
           <template v-else>
             <template v-if="!answered">
               <div class="modal-header">
-                <h5 class="modal-title" :id="'quiz-label-' + (quizIndex+1)">第 {{ (quizIndex+1) }} 問　{{ currentQuiz.quiz }}</h5>
+                <h5 class="modal-title" :id="'quiz-label-' + (quizIndex+1)">第 {{ (quizIndex+1) }} 問　{{ currentQuiz.title }}</h5>
               </div>
               <div class="modal-body">
                 <button
@@ -33,11 +33,13 @@
             </template>
             <template v-if="answered">
               <div class="modal-header">
-                <h5 class="modal-title" :id="'quiz-answer-' + (quizIndex+1)">{{ result }}</h5>
+                <h5 class="modal-title" :id="'quiz-answer-' + (quizIndex+1)">第 {{ (quizIndex+1) }} 問　{{ currentQuiz.title }}</h5>
               </div>
-              <div class="modal-body">
-                <p>正しい回答：{{ current_answer }}</p>
-                <p>あなたの回答：{{ user_answer }}</p>
+              <div class="modal-body text-center">
+                <h4 :style="{ color: fontColor }">{{ result }}</h4>
+                <h5 v-if="currentQuiz.content">{{ currentQuiz.content }}</h5>
+                <span>正しい回答：{{ current_answer }}</span><br>
+                <span>あなたの回答：{{ user_answer }}</span>
               </div>
               <div class="modal-footer">
                 <button @click="nextQuiz"  class="btn btn-success" data-bs-toggle="modal" data-dismiss="modal">{{ next }}</button>
@@ -69,8 +71,14 @@ import QuizConfirmationModel from './QuizConfirmationModel.vue'
 import QuizResultModel from './QuizResultModel.vue'
 
 export default {
-  name: "EasyQuizModel",
+  name: "QuizModel",
   components: { QuizConfirmationModel, QuizResultModel },
+  props: {
+    setQuizzes: {
+      type: Array,
+      require: true
+    }
+  },
   data() {
     return {
       quizIndex: 0,
@@ -81,39 +89,8 @@ export default {
       current_answer: "",
       user_answer: "",
       next: '次へ',
-      quizzes: [
-        {
-          quiz: '「A」の音は？',
-          options: [
-              '６弦開放',
-              '５弦開放',
-              '４弦開放',
-              '３弦開放',
-          ],
-          answer: 1
-        },
-        {
-          quiz: '「C」の音は？',
-          options: [
-              '６弦４フレット',
-              '５弦３フレット',
-              '４弦２フレット',
-              '３弦１フレット',
-          ],
-          answer: 1
-      },
-        {
-          quiz: '「D」の音は？',
-          options: [
-              '３弦開放',
-              '２限開放',
-              '２弦３フレット',
-              '１弦３フレット',
-          ],
-          answer: 2
-        }
-      ],
       startFlag: false,
+      fontColor: "",
       isVisibleQuizConfirmationModel: false,
       isVisibleQuizResultModel: false,
     }
@@ -121,10 +98,23 @@ export default {
   computed: {
     // 解答中のクイズ
     currentQuiz() {
-      return this.quizzes[this.quizIndex];
+      return this.setQuizzes[this.quizIndex];
     }
   },
   methods: {
+    // this.quizzesの中身をシャッフルするメソッド
+    quizShuffle(array) {
+      this.startFlag = true
+      for(var i = (array.length - 1); 0 < i; i--){
+        // 0〜(i+1)の範囲で値を取得
+        var r = Math.floor(Math.random() * (i + 1));
+        // 要素の並び替えを実行
+        var tmp = array[i];
+        array[i] = array[r];
+        array[r] = tmp;
+      }
+      return array;
+    },
     handleOpenQuizConfirmationModel() {
       this.isVisibleQuizConfirmationModel = true;
     },
@@ -135,11 +125,11 @@ export default {
       this.$emit('close-quiz')
     },
     nextQuiz(){
-      this.answered = false
-      if(this.quizzes.length == this.answers.length) {
+      if(10 == this.answers.length) {
         this.isVisibleQuizResultModel = true;
       } else {
         this.quizIndex++;
+        this.answered = false
       }
     },
     // 正誤チェッカー
@@ -148,14 +138,16 @@ export default {
       this.answered = true;
       this.current_answer = this.currentQuiz.options[this.currentQuiz.answer]
       this.user_answer = this.currentQuiz.options[key]
-      if(this.quizzes.length == this.answers.length) {
+      if(10 == this.answers.length) {
         this.next = '結果発表';
       }
       if(key == this.currentQuiz.answer) {
-        this.result = '正解'
+        this.fontColor = 'red';
+        this.result = '正解🙆‍♂️';
         this.overallResults.push('correct');
       } else {
-        this.result = '不正解'
+        this.fontColor = 'blue';
+        this.result = '不正解🙅‍♂️';
         this.overallResults.push('incorrect');
       }
     }
