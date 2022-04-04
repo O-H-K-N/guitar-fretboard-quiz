@@ -14,13 +14,13 @@
           <template v-else>
             <template v-if="!answered">
               <div class="modal-header">
-                <h5 class="modal-title" :id="'question-label-' + questionIndex+1">第 {{ (questionIndex+1) }} 問　{{ currentQuestion.question }}</h5>
+                <h5 class="modal-title" :id="'quiz-label-' + (quizIndex+1)">第 {{ (quizIndex+1) }} 問　{{ currentQuiz.quiz }}</h5>
               </div>
               <div class="modal-body">
                 <button
                   type="button"
                   class="btn btn-primary btn-lg btn-block text-left"
-                  v-for="(option, key) in currentQuestion.options"
+                  v-for="(option, key) in currentQuiz.options"
                   :key="key"
                   @click="judgeAnswer(key)"
                 >
@@ -33,7 +33,7 @@
             </template>
             <template v-if="answered">
               <div class="modal-header">
-                <h5 class="modal-title" :id="'question-answer-' + questionIndex+1">{{ result }}</h5>
+                <h5 class="modal-title" :id="'quiz-answer-' + (quizIndex+1)">{{ result }}</h5>
               </div>
               <div class="modal-body">
                 <p>正しい回答：{{ current_answer }}</p>
@@ -73,7 +73,7 @@ export default {
   components: { QuizConfirmationModel, QuizResultModel },
   data() {
     return {
-      questionIndex: 0,
+      quizIndex: 0,
       answers: [],
       result: "",
       overallResults: [],
@@ -81,9 +81,9 @@ export default {
       current_answer: "",
       user_answer: "",
       next: '次へ',
-      questions: [
+      quizzes: [
         {
-          question: '「A」の音は？',
+          quiz: '「A」の音は？',
           options: [
               '６弦開放',
               '５弦開放',
@@ -93,7 +93,7 @@ export default {
           answer: 1
         },
         {
-          question: '「C」の音は？',
+          quiz: '「C」の音は？',
           options: [
               '６弦４フレット',
               '５弦３フレット',
@@ -103,7 +103,7 @@ export default {
           answer: 1
       },
         {
-          question: '「D」の音は？',
+          quiz: '「D」の音は？',
           options: [
               '３弦開放',
               '２限開放',
@@ -120,8 +120,8 @@ export default {
   },
   computed: {
     // 解答中のクイズ
-    currentQuestion() {
-      return this.questions[this.questionIndex];
+    currentQuiz() {
+      return this.quizzes[this.quizIndex];
     }
   },
   methods: {
@@ -136,22 +136,22 @@ export default {
     },
     nextQuiz(){
       this.answered = false
-      if(this.questions.length == this.answers.length) {
+      if(this.quizzes.length == this.answers.length) {
         this.isVisibleQuizResultModel = true;
       } else {
-        this.questionIndex++;
+        this.quizIndex++;
       }
     },
     // 正誤チェッカー
     judgeAnswer(key) {
       this.answers.push(key);
       this.answered = true;
-      this.current_answer = this.currentQuestion.options[this.currentQuestion.answer]
-      this.user_answer = this.currentQuestion.options[key]
-      if(this.questions.length == this.answers.length) {
+      this.current_answer = this.currentQuiz.options[this.currentQuiz.answer]
+      this.user_answer = this.currentQuiz.options[key]
+      if(this.quizzes.length == this.answers.length) {
         this.next = '結果発表';
       }
-      if(key == this.currentQuestion.answer) {
+      if(key == this.currentQuiz.answer) {
         this.result = '正解'
         this.overallResults.push('correct');
       } else {
