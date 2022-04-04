@@ -7,4 +7,4 @@ test:
 production:
   adapter: redis
   url: <%= ENV.fetch("REDIS_URL") { "redis://localhost:6379/1" } %>
-  channel_prefix: GuitarChordsQuiz_production
+  channel_prefix: guitar_fretboard_quiz_production
