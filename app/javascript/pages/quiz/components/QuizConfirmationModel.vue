@@ -17,7 +17,7 @@
 
 <script>
 export default {
-  name: "QuizEasy",
+  name: "QuizConfirmationModel",
   methods: {
     handleCloseQuizConfirmationModel() {
       this.$emit('close-confirmation')

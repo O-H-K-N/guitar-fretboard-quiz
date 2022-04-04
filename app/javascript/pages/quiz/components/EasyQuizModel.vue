@@ -8,7 +8,7 @@
           >
             <div class="modal-body text-center">
               <button @click="startFlag = true"  class="btn btn-success" data-bs-toggle="modal" data-dismiss="modal">始める</button>
-              <button @click="handleCloseCloseQuizModel" class="btn btn-secondary" data-dismiss="modal">閉じる</button>
+              <button @click="handleCloseQuizModel" class="btn btn-secondary" data-dismiss="modal">閉じる</button>
             </div>
           </template>
           <template v-else>
@@ -36,19 +36,24 @@
                 <h5 class="modal-title" :id="'question-answer-' + questionIndex+1">{{ result }}</h5>
               </div>
               <div class="modal-body">
-                <p>正しい回答：{{ current_answer }}. {{ current_answer_text }}</p>
-                <p>あなたの回答：{{ user_answer }}. {{ user_answer_text }}</p>
+                <p>正しい回答：{{ current_answer }}</p>
+                <p>あなたの回答：{{ user_answer }}</p>
               </div>
               <div class="modal-footer">
-                <button @click="nextQuiz"  class="btn btn-success" data-bs-toggle="modal" data-dismiss="modal">次へ</button>
+                <button @click="nextQuiz"  class="btn btn-success" data-bs-toggle="modal" data-dismiss="modal">{{ next }}</button>
                 <button @click="handleOpenQuizConfirmationModel" class="btn btn-secondary" data-dismiss="modal">閉じる</button>
               </div>
             </template>
             <transition name="fade">
               <QuizConfirmationModel
-                v-if="isVisibleCloseQuizConfirmationModel"
-                @close-quiz="handleCloseCloseQuizModel"
+                v-if="isVisibleQuizConfirmationModel"
+                @close-quiz="handleCloseQuizModel"
                 @close-confirmation="handleCloseQuizConfirmationModel"
+              />
+              <QuizResultModel
+                v-if="isVisibleQuizResultModel"
+                :overallResults="overallResults"
+                @close-quiz="handleCloseQuizModel"
               />
             </transition>
           </template>
@@ -61,20 +66,21 @@
 
 <script>
 import QuizConfirmationModel from './QuizConfirmationModel.vue'
+import QuizResultModel from './QuizResultModel.vue'
 
 export default {
-  name: "QuizEasy",
-  components: { QuizConfirmationModel },
+  name: "EasyQuizModel",
+  components: { QuizConfirmationModel, QuizResultModel },
   data() {
     return {
       questionIndex: 0,
       answers: [],
       result: "",
+      overallResults: [],
       answered: false,
-      current_answer: 0,
-      current_answer_text: "",
-      user_answer: 0,
-      user_answer_text: "",
+      current_answer: "",
+      user_answer: "",
+      next: '次へ',
       questions: [
         {
           question: '「A」の音は？',
@@ -108,54 +114,49 @@ export default {
         }
       ],
       startFlag: false,
-      isVisibleCloseQuizConfirmationModel: false,
+      isVisibleQuizConfirmationModel: false,
+      isVisibleQuizResultModel: false,
     }
   },
   computed: {
+    // 解答中のクイズ
     currentQuestion() {
       return this.questions[this.questionIndex];
     }
   },
   methods: {
     handleOpenQuizConfirmationModel() {
-      this.isVisibleCloseQuizConfirmationModel = true;
+      this.isVisibleQuizConfirmationModel = true;
     },
     handleCloseQuizConfirmationModel() {
-      this.isVisibleCloseQuizConfirmationModel = false;
+      this.isVisibleQuizConfirmationModel = false;
     },
-    handleCloseCloseQuizModel() {
+    handleCloseQuizModel() {
       this.$emit('close-quiz')
     },
     nextQuiz(){
-      this.result = '';
       this.answered = false
-      // 正答数カウンター
       if(this.questions.length == this.answers.length) {
-        var correctCount = 0;
-        for(var i in this.answers) {
-          var answer = this.answers[i];
-          if(answer == this.questions[i].answer) {
-              correctCount++;
-          }
-        }
-        alert(this.questionIndex+1 + '問中' + correctCount +'問正解です！');
-        this.$emit('close-quiz')
+        this.isVisibleQuizResultModel = true;
       } else {
         this.questionIndex++;
       }
     },
+    // 正誤チェッカー
     judgeAnswer(key) {
-      // 正誤チェッカー
       this.answers.push(key);
       this.answered = true;
-      this.current_answer = this.questions[this.questionIndex].answer + 1
-      this.current_answer_text = this.questions[this.questionIndex].options[this.current_answer - 1]
-      this.user_answer = key + 1
-      this.user_answer_text = this.questions[this.questionIndex].options[key]
-      if(key == this.questions[this.questionIndex].answer) {
+      this.current_answer = this.currentQuestion.options[this.currentQuestion.answer]
+      this.user_answer = this.currentQuestion.options[key]
+      if(this.questions.length == this.answers.length) {
+        this.next = '結果発表';
+      }
+      if(key == this.currentQuestion.answer) {
         this.result = '正解'
+        this.overallResults.push('correct');
       } else {
         this.result = '不正解'
+        this.overallResults.push('incorrect');
       }
     }
   }
