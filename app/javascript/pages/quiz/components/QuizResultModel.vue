@@ -1,0 +1,57 @@
+<template>
+  <div id="quiz-confirmation-modal">
+    <div class="modal">
+      <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">結果発表</h5>
+          </div>
+          <div class="modal-body text-center">
+            <p>{{ numberOfQuizzes }}問中{{ score }}問正解です！</p>
+          </div>
+          <div class="modal-footer">
+            <button @click="handleCloseQuizModel" class="btn btn-secondary" data-dismiss="modal">終了</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-backdrop show" />
+  </div>
+</template>
+
+<script>
+export default {
+  name: "QuizResultModel",
+  props: {
+    overallResults: {
+      type: Array,
+      required: true
+    },
+  },
+  data() {
+    return {
+      score_counter: 0,
+    }
+  },
+  computed: {
+    numberOfQuizzes() {
+      return this.overallResults.length
+    },
+    score() {
+      this.score_counter =  this.overallResults.filter(e => e == 'correct' )
+      return this.score_counter.length
+    },
+  },
+  methods: {
+    handleCloseQuizModel() {
+      this.$emit('close-quiz')
+    },
+  }
+}
+</script>
+
+<style scoped>
+.modal{
+  display: block;
+}
+</style>

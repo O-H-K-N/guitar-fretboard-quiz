@@ -15,7 +15,7 @@ export default {
   name: "TheHeader",
   data() {
     return {
-      app_name: "Quiz Guitar Chord"
+      app_name: "ギター指板クイズ"
     }
   },
 }
@@ -23,6 +23,7 @@ export default {
 
 <style scoped>
 header{
+  font-family: "ヒラギノ丸ゴ ProN","Hiragino Maru Gothic ProN";
   background-color: rgba(245, 245, 220, 0.4);
   box-shadow: 0px 2px 4px #ddebf3, 0px -2px 4px #ddebf3;
 }

@@ -1,7 +1,7 @@
 ja:
   defaults:
-    app_name: 'Quiz Guitar Chord'
-    footer_app_name: '© 2022 Quiz Guitar Chord'
+    app_name: 'ギター指板クイズ'
+    footer_app_name: '© 2022 ギター指板クイズ'
     level1: 'E A S Y'
     level2: 'M I D D L E'
     level3: 'H I G H'
