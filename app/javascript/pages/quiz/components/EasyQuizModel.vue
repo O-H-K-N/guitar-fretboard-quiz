@@ -33,11 +33,13 @@
             </template>
             <template v-if="answered">
               <div class="modal-header">
-                <h5 class="modal-title" :id="'quiz-answer-' + (quizIndex+1)">{{ result }}</h5>
+                <h5 class="modal-title" :id="'quiz-answer-' + (quizIndex+1)">第 {{ (quizIndex+1) }} 問　{{ currentQuiz.title }}</h5>
               </div>
-              <div class="modal-body">
-                <p>正しい回答：{{ current_answer }}</p>
-                <p>あなたの回答：{{ user_answer }}</p>
+              <div class="modal-body text-center">
+                <h4 :style="{ color: fontColor }">{{ result }}</h4>
+                <h5 v-if="currentQuiz.content">{{ currentQuiz.content }}</h5>
+                <span>正しい回答：{{ current_answer }}</span><br>
+                <span>あなたの回答：{{ user_answer }}</span>
               </div>
               <div class="modal-footer">
                 <button @click="nextQuiz"  class="btn btn-success" data-bs-toggle="modal" data-dismiss="modal">{{ next }}</button>
@@ -83,6 +85,7 @@ export default {
       next: '次へ',
       quizzes: [],
       startFlag: false,
+      fontColor: "",
       isVisibleQuizConfirmationModel: false,
       isVisibleQuizResultModel: false,
     }
@@ -113,11 +116,11 @@ export default {
       this.$emit('close-quiz')
     },
     nextQuiz(){
-      this.answered = false
       if(this.quizzes.length == this.answers.length) {
         this.isVisibleQuizResultModel = true;
       } else {
         this.quizIndex++;
+        this.answered = false
       }
     },
     // 正誤チェッカー
@@ -130,10 +133,12 @@ export default {
         this.next = '結果発表';
       }
       if(key == this.currentQuiz.answer) {
-        this.result = '正解'
+        this.fontColor = 'red';
+        this.result = '正解🙆‍♂️';
         this.overallResults.push('correct');
       } else {
-        this.result = '不正解'
+        this.fontColor = 'blue';
+        this.result = '不正解🙅‍♂️';
         this.overallResults.push('incorrect');
       }
     }

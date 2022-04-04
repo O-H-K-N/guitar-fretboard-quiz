@@ -9,8 +9,8 @@
           type="button">
             {{ level1}}
           </button><br>
-        <button class="btn btn-outline-light font-weight-bold px-3 m-3" type="button">{{ level2 }}</button><br>
-        <button class="btn btn-outline-light font-weight-bold px-3 m-3" type="button">{{ level3 }}</button>
+        <button class="btn btn-outline-light font-weight-bold px-3 m-3" type="button" disabled>{{ level2 }}</button><br>
+        <button class="btn btn-outline-light font-weight-bold px-3 m-3" type="button" disabled>{{ level3 }}</button>
       </div>
     </div>
     <transition name="fade">
