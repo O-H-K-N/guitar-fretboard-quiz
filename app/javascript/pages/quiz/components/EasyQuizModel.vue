@@ -129,7 +129,7 @@ export default {
       this.$emit('close-quiz')
     },
     nextQuiz(){
-      if(this.quizzes.length == this.answers.length) {
+      if(10 == this.answers.length) {
         this.isVisibleQuizResultModel = true;
       } else {
         this.quizIndex++;
@@ -142,7 +142,7 @@ export default {
       this.answered = true;
       this.current_answer = this.currentQuiz.options[this.currentQuiz.answer]
       this.user_answer = this.currentQuiz.options[key]
-      if(this.quizzes.length == this.answers.length) {
+      if(10 == this.answers.length) {
         this.next = '結果発表';
       }
       if(key == this.currentQuiz.answer) {
