@@ -14,7 +14,7 @@
           <template v-else>
             <template v-if="!answered">
               <div class="modal-header">
-                <h5 class="modal-title" :id="'quiz-label-' + (quizIndex+1)">第 {{ (quizIndex+1) }} 問　{{ currentQuiz.quiz }}</h5>
+                <h5 class="modal-title" :id="'quiz-label-' + (quizIndex+1)">第 {{ (quizIndex+1) }} 問　{{ currentQuiz.title }}</h5>
               </div>
               <div class="modal-body">
                 <button
@@ -81,42 +81,15 @@ export default {
       current_answer: "",
       user_answer: "",
       next: '次へ',
-      quizzes: [
-        {
-          quiz: '「A」の音は？',
-          options: [
-              '６弦開放',
-              '５弦開放',
-              '４弦開放',
-              '３弦開放',
-          ],
-          answer: 1
-        },
-        {
-          quiz: '「C」の音は？',
-          options: [
-              '６弦４フレット',
-              '５弦３フレット',
-              '４弦２フレット',
-              '３弦１フレット',
-          ],
-          answer: 1
-      },
-        {
-          quiz: '「D」の音は？',
-          options: [
-              '３弦開放',
-              '２限開放',
-              '２弦３フレット',
-              '１弦３フレット',
-          ],
-          answer: 2
-        }
-      ],
+      quizzes: [],
       startFlag: false,
       isVisibleQuizConfirmationModel: false,
       isVisibleQuizResultModel: false,
     }
+  },
+  created() {
+    // 呼び出したAPIからQuiz情報を取得
+    this.fetchQuizzes();
   },
   computed: {
     // 解答中のクイズ
@@ -125,6 +98,11 @@ export default {
     }
   },
   methods: {
+    fetchQuizzes() {
+      this.$axios.get("quizzes")
+        .then(res => this.quizzes = res.data)
+        .catch(err => console.log(err.status));
+    },
     handleOpenQuizConfirmationModel() {
       this.isVisibleQuizConfirmationModel = true;
     },
