@@ -7,6 +7,9 @@
             v-if="!startFlag"
           >
             <div class="modal-body text-center">
+              <div class="modal-body">
+                <h5>弦とフレットを選択して<br>クイズに答えよう！</h5>
+              </div>
               <button @click="quizShuffle(setQuizzes);" class="btn btn-success" data-bs-toggle="modal" data-dismiss="modal">始める</button>
               <button @click="handleCloseQuizModel" class="btn btn-secondary" data-dismiss="modal">閉じる</button>
             </div>
@@ -16,16 +19,29 @@
               <div class="modal-header">
                 <h5 class="modal-title" :id="'quiz-label-' + (quizIndex+1)">第 {{ (quizIndex+1) }} 問　{{ currentQuiz.title }}</h5>
               </div>
-              <div class="modal-body">
-                <button
-                  type="button"
-                  class="btn btn-primary btn-lg btn-block text-left"
-                  v-for="(option, key) in currentQuiz.options"
-                  :key="key"
-                  @click="judgeAnswer(key)"
-                >
-                  {{ (key+1) }}. {{ option }}
-                </button>
+              <div class="modal-body d-flex justify-content-around">
+                <div>
+                  <button
+                    type="button"
+                    class="btn btn-primary btn-lg btn-block text-center px-5"
+                    v-for="(string) in currentQuiz.strings"
+                    :key='string'
+                    @click="setString(string)"
+                  >
+                    {{ string }}
+                  </button>
+                </div>
+                <div>
+                  <button
+                    type="button"
+                    class="btn btn-primary btn-lg btn-block text-center"
+                    v-for="(fret) in currentQuiz.frets"
+                    :key="fret"
+                    @click="setFret(fret)"
+                  >
+                    {{ fret }}
+                  </button>
+                </div>
               </div>
               <div class="modal-footer">
                 <button @click="handleOpenQuizConfirmationModel" class="btn btn-secondary" data-dismiss="modal">閉じる</button>
@@ -82,6 +98,9 @@ export default {
   data() {
     return {
       quizIndex: 0,
+      fetchString: "",
+      fetchFret: "",
+      setAnswer: "",
       answers: [],
       result: "",
       overallResults: [],
@@ -129,15 +148,17 @@ export default {
         this.isVisibleQuizResultModel = true;
       } else {
         this.quizIndex++;
-        this.answered = false
+        this.answered = false;
+        this.fetchString = "";
+        this.fetchFret = "";
       }
     },
     // 正誤チェッカー
     judgeAnswer(key) {
       this.answers.push(key);
       this.answered = true;
-      this.current_answer = this.currentQuiz.options[this.currentQuiz.answer]
-      this.user_answer = this.currentQuiz.options[key]
+      this.current_answer = key
+      this.user_answer = this.currentQuiz.answer
       if(10 == this.answers.length) {
         this.next = '結果発表';
       }
@@ -150,7 +171,23 @@ export default {
         this.result = '不正解🙅‍♂️';
         this.overallResults.push('incorrect');
       }
-    }
+    },
+    // 選択された弦を取得
+    setString(key) {
+      this.fetchString = key
+      if(this.fetchFret != "") {
+        this.setAnswer = this.fetchString + this.fetchFret
+        this.judgeAnswer(this.setAnswer)
+      }
+    },
+    // 選択されたフレットを取得
+    setFret(key) {
+      this.fetchFret = key
+      if(this.fetchString != "") {
+        this.setAnswer = this.fetchString + this.fetchFret
+        this.judgeAnswer(this.setAnswer)
+      }
+    },
   }
 }
 </script>

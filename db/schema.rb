@@ -18,8 +18,9 @@ ActiveRecord::Schema.define(version: 2022_04_04_050006) do
   create_table "quizzes", force: :cascade do |t|
     t.string "title", null: false
     t.text "content"
-    t.string "options", default: [], null: false, array: true
-    t.integer "answer", default: 0, null: false
+    t.string "strings", default: [], null: false, array: true
+    t.string "frets", default: [], null: false, array: true
+    t.string "answer", null: false
     t.integer "category", default: 0, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
