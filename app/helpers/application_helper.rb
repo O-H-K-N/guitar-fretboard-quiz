@@ -5,7 +5,7 @@ module ApplicationHelper
       title: 'クイズで指板の位置を音名で覚えよう！',
       reverse: true,
       charset: 'utf-8',
-      description: '音名をギターので答えるクイズアプリです。',
+      description: '音名をギターの指板の位置で答えるクイズアプリです。',
       keywords: 'ギター, 指板, コード, フレット, アコースティックギター, アコギ',
       canonical: request.original_url,
       separator: '|',
