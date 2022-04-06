@@ -22,6 +22,9 @@ module ApplicationHelper
         image: image_url('ogp.png'),
         locale: 'ja_JP',
       },
+      twitter: {
+        card: 'summary',
+      }
     }
   end
 end

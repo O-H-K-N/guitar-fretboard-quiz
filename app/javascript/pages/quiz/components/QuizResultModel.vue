@@ -18,6 +18,13 @@
             </div>
           </template>
           <div class="modal-footer">
+            <button
+              class="btn btn-primary text-white shadow col-5"
+              @click="twitterShare"
+            >
+              <font-awesome-icon :icon="['fab', 'twitter']" />
+                シェアする
+            </button>
             <button @click="handleCloseQuizModel" class="btn btn-secondary" data-dismiss="modal">終了</button>
           </div>
         </div>
@@ -54,6 +61,34 @@ export default {
     handleCloseQuizModel() {
       this.$emit('close-quiz')
     },
+    twitterShare() {
+      var shareURL =
+      'https://twitter.com/intent/tweet?text='
+      +
+      'ギター指板クイズ'
+      +
+      '%0a'
+      +
+      `${this.numberOfQuizzes}問中${this.score}問正解です！`
+      +
+      '%0a'
+      +
+      '%20%23ギター指板クイズ'
+      +
+      '%0a'
+      +
+      '%20%23弾いてみた'
+      +
+      '%0a'
+      +
+      '%20%23弾き語り'
+      +
+      '%0a'
+      +
+      '&url='
+      +'https://guitar-fretboard-quiz.herokuapp.com/';
+      window.open(shareURL, '_blank')
+    }
   }
 }
 </script>
