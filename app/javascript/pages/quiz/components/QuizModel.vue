@@ -34,7 +34,7 @@
                 <div>
                   <button
                     type="button"
-                    class="btn btn-primary btn-lg btn-block text-center"
+                    class="btn btn-info btn-lg btn-block text-center"
                     v-for="(fret) in currentQuiz.frets"
                     :key="fret"
                     @click="setFret(fret)"

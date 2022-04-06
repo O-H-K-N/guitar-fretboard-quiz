@@ -6,9 +6,17 @@
           <div class="modal-header">
             <h5 class="modal-title">結果発表</h5>
           </div>
-          <div class="modal-body text-center">
-            <h4>{{ numberOfQuizzes }}問中{{ score }}問正解です！</h4>
-          </div>
+          <template v-if="numberOfQuizzes == score">
+            <div class="modal-body text-center">
+              <h4>{{ numberOfQuizzes }}問中{{ score }}問正解です！</h4>
+              <h4 style="red">すごい！全問正解です！</h4>
+            </div>
+          </template>
+          <template v-else>
+            <div class="modal-body text-center">
+              <h4>{{ numberOfQuizzes }}問中<span>{{ score }}問</span>正解です！</h4>
+            </div>
+          </template>
           <div class="modal-footer">
             <button @click="handleCloseQuizModel" class="btn btn-secondary" data-dismiss="modal">終了</button>
           </div>
@@ -53,5 +61,8 @@ export default {
 <style scoped>
 .modal{
   display: block;
+}
+span{
+  color: red;
 }
 </style>
