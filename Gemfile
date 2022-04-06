@@ -30,6 +30,8 @@ gem 'jbuilder', '~> 2.7'
 gem 'bootsnap', '>= 1.4.4', require: false
 
 gem 'rails-i18n'
+# metaタグの利用
+gem 'meta-tags'
 
 group :development, :test do
   # Debugger
